@@ -2,6 +2,8 @@
 :toc: left
 
 == Preface
+Code for question https://stackoverflow.com/questions/77822470/jetty-12-spring-6-missing-content-length-in-response.
+
 [%autowidth]
 |===
 |Jetty |Spring |EE namespace|Jdk
