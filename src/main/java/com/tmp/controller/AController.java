@@ -11,13 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AController {
 
-//    //3.
-//    @PostMapping("/controller/**")
-//    public String controller() {
-//        return "{}";
-//    }
-
-    //4.
     @PostMapping("/controller/**")
     @Valid
     public ARespModel controller(@Valid @RequestBody AReqModel req) {
