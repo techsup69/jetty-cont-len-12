@@ -1,0 +1,73 @@
+= Jetty 12 Spring 6 - Content-Length investigation
+:toc: left
+
+== Preface
+[%autowidth]
+|===
+|Jetty |Spring |EE namespace|Jdk
+
+|12
+|6
+|jakarta
+|21
+|===
+
+== Build and run
+[source,bash]
+----
+mvn clean package
+----
+
+Run `com.tmp.App`.
+
+== Results
+.AController - missing Content-Length and Transfer-Encoding
+[source,bash]
+----
+$ curl -v -X POST -H "Connection:close" -H "Content-Type: application/json" -d '{"input":"aaa"}' http://localhost:1221/abc/controller/
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying 127.0.0.1:1221...
+* Connected to localhost (127.0.0.1) port 1221 (#0)
+> POST /abc/controller/ HTTP/1.1
+> Host: localhost:1221
+> User-Agent: curl/7.81.0
+> Accept: */*
+> Connection:close
+> Content-Type: application/json
+> Content-Length: 15
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Server: Jetty(12.0.2)
+< Date: Mon, 15 Jan 2024 19:16:52 GMT
+< Content-Type: application/json;charset=utf-8
+< Connection: close
+<
+* Closing connection 0
+{"msg":"aaa"}
+----
+
+.AServlet - ok
+[source,bash]
+----
+$ curl -v -X POST -H "Connection:close" -H "Content-Type: application/json" http://localhost:1221/abc/simple
+*   Trying 127.0.0.1:1221...
+* Connected to localhost (127.0.0.1) port 1221 (#0)
+> POST /abc/simple HTTP/1.1
+> Host: localhost:1221
+> User-Agent: curl/7.81.0
+> Accept: */*
+> Connection:close
+> Content-Type: application/json
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Server: Jetty(12.0.2)
+< Date: Mon, 15 Jan 2024 19:16:17 GMT
+< Content-Type: application/json;charset=utf-8
+< Content-Length: 2
+< Connection: close
+<
+* Closing connection 0
+{}
+----
